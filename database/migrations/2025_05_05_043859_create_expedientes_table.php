@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('estatus', function (Blueprint $table) {
+        Schema::create('expedientes', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre')->unique();
+            $table->string('numero_expediente')->unique();
+            $table->text('asunto');
+            $table->date('fecha_inicio');
+            $table->foreignId('id_estatus')->constrained('estatus');
+            $table->foreignId('id_usuario_registra')->constrained('users');
             $table->timestamps();
+            $table->softDeletes(); // Para el borrado lógico
         });
     }
 
@@ -23,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('estatus');
+        Schema::dropIfExists('expedientes');
     }
 };

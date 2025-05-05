@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ExpedienteUpdateRequest extends FormRequest
+class ExpedienteCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return $this->user()->can('update', $this->route('expediente'));
+        return $this->user()->can('create', \App\Models\Expediente::class);
     }
 
     /**

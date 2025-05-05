@@ -1,4 +1,3 @@
-
 <?php
 
 namespace Database\Seeders;
@@ -13,8 +12,10 @@ class EstatusSeeder extends Seeder
      */
     public function run(): void
     {
-        Estatus::create(['nombre' => 'abierto']);
-        Estatus::create(['nombre' => 'en proceso']);
-        Estatus::create(['nombre' => 'concluido']);
+        if (Estatus::count() == 0) {
+            Estatus::create(['nombre' => 'abierto']);
+            Estatus::create(['nombre' => 'en proceso']);
+            Estatus::create(['nombre' => 'concluido']);
+        }
     }
 }

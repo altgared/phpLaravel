@@ -57,8 +57,30 @@ class User extends Authenticatable
      * Verificar si el usuario tiene un rol específico.
      */
     public function hasRole($rolNombre)
-    {
-        return $this->rol->nombre === $rolNombre;
+{
+        // Si no tenemos un id_rol, claramente no tenemos el rol solicitado
+        if (!$this->id_rol) {
+            return false;
+        }
+        
+        // Cargar el rol si aún no se ha cargado
+        if (!$this->relationLoaded('rol')) {
+            $this->load('rol');
+        }
+        
+        // Si después de intentar cargar no hay rol, devolver false
+        if (!$this->rol) {
+            // Intenta buscar el rol directamente para debug
+            $rolDirecto = \App\Models\Role::find($this->id_rol);
+            \Illuminate\Support\Facades\Log::debug('Rol no cargado para usuario ' . $this->id . '. ID rol: ' . $this->id_rol . '. Rol directo: ' . ($rolDirecto ? $rolDirecto->nombre : 'No encontrado'));
+            return false;
+        }
+        
+        // Comparar el nombre del rol
+        $coincide = $this->rol->nombre === $rolNombre;
+        \Illuminate\Support\Facades\Log::debug('Verificando rol para usuario ' . $this->id . ': ' . $this->rol->nombre . ' == ' . $rolNombre . '? ' . ($coincide ? 'Sí' : 'No'));
+        
+        return $coincide;
     }
     
     /**
